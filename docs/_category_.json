@@ -1,0 +1,9 @@
+{
+  "label": "GCS Upload",
+  "link": {
+    "type": "generated-index",
+    "title": "GCS Upload",
+    "description": "Documentation for GCS Upload filter.",
+    "slug": "/filter-connector-gcs"
+  }
+}
