@@ -1,0 +1,79 @@
+services:
+  
+  rtsp-streamer:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/rtsp-streamer:v1.1.0
+    ports:
+      - "${RTSP_PORT:-8554}:8554"
+      - "${WEB_INTERFACE_PORT:-8888}:8888"
+    volumes:
+      - type: bind
+        source: ${VIDEO_SOURCE-.}
+        target: /data/videos
+        read_only: true
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8554 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped 
+  
+  # Video Input
+  vidin:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/video_in:v1.4.18
+    environment:
+      FILTER_ID: vidin
+      FILTER_SOURCES: rtsp://rtsp-streamer:8554/stream0
+      FILTER_OUTPUTS: tcp://*
+    depends_on:
+      rtsp-streamer:
+        condition: service_healthy
+
+  # Frame Deduplication
+  frame_dedup:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/filter-frame-dedup:v1.0.8
+    environment:
+      FILTER_ID: frame_dedup
+      FILTER_SOURCES: "tcp://vidin"
+      FILTER_OUTPUTS: "tcp://*"
+      FILTER_HASH_THRESHOLD: "${FILTER_HASH_THRESHOLD:-5}"
+      FILTER_MOTION_THRESHOLD: "${FILTER_MOTION_THRESHOLD:-1200}"
+      FILTER_MIN_TIME_BETWEEN_FRAMES: "${FILTER_MIN_TIME_BETWEEN_FRAMES:-1.0}"
+      FILTER_SSIM_THRESHOLD: "${FILTER_SSIM_THRESHOLD:-0.9}"
+      FILTER_OUTPUT_FOLDER: "/app/output"
+    volumes:
+      - ./output:/app/output
+    ports:
+      - "6001:6001"
+
+  # Video to GCS Upload
+  filter_connector_gcs:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/filter-connector-gcs:v1.5.2
+    environment:
+      FILTER_ID: filter_connector_gcs
+      FILTER_SOURCES: "tcp://vidin"
+      FILTER_OUTPUTS: ${GCP_STORAGE_URL}
+      FILTER_EXIT_AFTER: "${FILTER_EXIT_AFTER:-48:00:00}"
+      FILTER_IMAGE_FOLDER: /app/output
+      FILTER_MQ_LOG: pretty
+      GOOGLE_APPLICATION_CREDENTIALS: "/run/secrets/google"
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT}
+    secrets:
+      - google
+    volumes:
+      - ./output:/app/output
+      - ./work:/filter/work
+
+  # Web Visualization
+  webvis:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/webvis:v1.4.18
+    environment:
+      FILTER_ID: webvis
+      FILTER_SOURCES: "tcp://frame_dedup"
+    ports:
+      - 8002:8000
+
+# SECRETS:
+secrets:
+  google:
+    file: ${GOOGLE_APPLICATION_CREDENTIALS}

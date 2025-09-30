@@ -1,0 +1,63 @@
+services:
+  rtsp-streamer:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/rtsp-streamer:v1.1.0
+    ports:
+      - "${RTSP_PORT:-8554}:8554"
+      - "${WEB_INTERFACE_PORT:-8888}:8888"
+    volumes:
+      - type: bind
+        source: ${VIDEO_SOURCE-.}
+        target: /data/videos
+        read_only: true
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8554 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped 
+
+  vidin:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/video_in:v1.4.18
+    environment:
+      FILTER_ID: vidin
+      FILTER_SOURCES: rtsp://rtsp-streamer:8554/stream0
+      FILTER_OUTPUTS: tcp://*
+    depends_on:
+      rtsp-streamer:
+        condition: service_healthy
+    # TODO: Add back in case we need to wait for RTSP server to fully initialize
+    # command: >
+    #   sh -c "
+    #   echo 'Waiting for RTSP server to fully initialize...' &&
+    #   sleep 1 &&
+    #   python -m filter_runtime.filters.video_in
+    #   "
+
+  filter_connector_gcs:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/filter-connector-gcs:v1.5.2
+    environment:
+      FILTER_ID: filter_connector_gcs
+      FILTER_SOURCES: "tcp://vidin"
+      FILTER_OUTPUTS: ${GCP_STORAGE_URL}
+      FILTER_EXIT_AFTER: "${FILTER_EXIT_AFTER:-48:00:00}"
+      FILTER_MQ_LOG: pretty
+      GOOGLE_APPLICATION_CREDENTIALS: "/run/secrets/google"
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT}
+    secrets:
+      - google
+    volumes:
+      - ./output:/app/output
+      - ./work:/filter/work
+
+  webvis:
+    image: us-west1-docker.pkg.dev/plainsightai-prod/oci/webvis:v1.4.18
+    environment:
+      FILTER_ID: webvis
+      FILTER_SOURCES: "tcp://vidin"
+    ports:
+      - 8002:8000
+
+secrets:
+  google:
+      file: ${GOOGLE_APPLICATION_CREDENTIALS}
