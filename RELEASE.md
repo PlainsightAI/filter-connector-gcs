@@ -3,6 +3,14 @@ GCS Upload release notes
 
 ## [Unreleased]
 
+## v2.0.3 - 2026-04-15
+
+### Changed
+- Add CI/CD workflows: create-release.yaml (Docker Hub publishing), ci.yaml (PR testing), security-scan.yaml
+- Bump openfilter dependency to >=0.1.27
+- Update Makefile IMAGE to Docker Hub path
+
+
 ## v2.0.2 - 2025-09-27
 ### Updated
 - **Documentation**: Updated documentation
