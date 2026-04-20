@@ -1,6 +1,8 @@
 # ---------------------------------
 # Repo-specific variables
 # ---------------------------------
+
+IMAGE ?= plainsightai/openfilter-connector-gcs
 # Define these for consistency in the repo
 REPO_NAME ?= filter-connector-gcs
 REPO_NAME_SNAKECASE ?= filter_connector_gcs
