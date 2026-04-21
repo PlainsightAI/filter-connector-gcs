@@ -3,6 +3,13 @@ GCS Upload release notes
 
 ## [Unreleased]
 
+## v2.0.4 - 2026-04-20
+
+### Changed
+- Remove redundant ci.yaml (shared workflow handles PR testing)
+- Add push + pull_request triggers to create-release.yaml
+
+
 ## v2.0.3 - 2026-04-15
 
 ### Changed
