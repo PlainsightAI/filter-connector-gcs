@@ -1,3 +1,13 @@
+# v2.0.5
+
+## v2.0.5 - 2026-04-23
+
+### Changed
+- Bump openfilter SDK, align CI workflow with shared release gate (source-paths)
+
+- Fix release workflow secret names: `PYPI_API_TOKEN` → `PLAINSIGHT_PYPI_TOKEN`, `DOCKERHUB_TOKEN` → `DOCKERHUB_ACCESS_TOKEN` (org-level secret names). Without this the PyPI / Docker Hub tokens resolved to empty and no package has been published since the migration.
+- Bump openfilter dependency to `>=0.1.30`.
+
 # Changelog
 GCS Upload release notes
 
