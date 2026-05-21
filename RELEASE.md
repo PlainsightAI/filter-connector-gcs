@@ -10,6 +10,7 @@
 
 # Changelog
 GCS Upload release notes
+- Bump openfilter to 1.1.0
 
 ## [Unreleased]
 
