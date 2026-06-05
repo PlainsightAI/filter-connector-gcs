@@ -16,6 +16,7 @@ GCS Upload release notes
 ### Changed
 
 - Bump openfilter to 1.1.0
+- Bump openfilter to 1.1.1
 
 ## v2.0.4 - 2026-04-20
 
