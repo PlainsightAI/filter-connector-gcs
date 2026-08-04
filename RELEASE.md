@@ -10,7 +10,7 @@ GCS Upload release notes
 - Grant `id-token: write` in `create-release.yaml` so the public release workflow can produce a keyless (cosign) SBOM attestation for the published image (once the shared SBOM steps land).
 - Fix the `RELEASE.md` header (`# Changelog` first line; a stray `# v2.0.5` H1 plus a duplicated `# Changelog`/`[Unreleased]` block broke the changelog-parser).
 - Pin the Docker base to `python:3.11.12-slim` (was `python:3.11-slim`).
-- Fix the `docker-compose.yaml` utility images (were the malformed `openfilter-video-in`/`webvis` + `-connector-gcs` concatenation) and point them at `containers.openfilter.io/plainsightai/openfilter-{video-in,webvis}:1.2.1`.
+- Fix the `docker-compose.yaml` utility images (were the malformed `openfilter-video-in`/`webvis` + `-connector-gcs` concatenation) and point them at `containers.openfilter.io/plainsightai/openfilter-{video-in,webvis}:1.2.1`; pin the filter's own image to `openfilter-connector-gcs:2.0.6`.
 - Update dev-tooling floors (`setuptools>=83.0.0`) and switch dev pins to range pins.
 
 ## v2.0.5 - 2026-04-23
