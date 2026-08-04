@@ -1,25 +1,23 @@
-# v2.0.5
-
-## v2.0.5 - 2026-04-23
-
-### Changed
-- Bump openfilter SDK, align CI workflow with shared release gate (source-paths)
-
-- Fix release workflow secret names: `PYPI_API_TOKEN` → `PLAINSIGHT_PYPI_TOKEN`, `DOCKERHUB_TOKEN` → `DOCKERHUB_ACCESS_TOKEN` (org-level secret names). Without this the PyPI / Docker Hub tokens resolved to empty and no package has been published since the migration.
-- Bump openfilter dependency to `>=0.1.30`.
-
 # Changelog
 GCS Upload release notes
 
 ## [Unreleased]
 
-### Changed
+## v2.0.6 - 2026-08-04
 
-- Bump openfilter to 1.1.0
-- Bump openfilter to 1.1.1
-- Bump openfilter to 1.1.2
-- Bump the openfilter dependency to 1.2.0
-- Bump the openfilter dependency to 1.2.1
+### Changed
+- Update `openfilter[all]` to `>=1.2.1`.
+- Grant `id-token: write` in `create-release.yaml` so the public release workflow can produce a keyless (cosign) SBOM attestation for the published image (once the shared SBOM steps land).
+- Fix the `RELEASE.md` header (`# Changelog` first line; a stray `# v2.0.5` H1 plus a duplicated `# Changelog`/`[Unreleased]` block broke the changelog-parser).
+- Pin the Docker base to `python:3.11.12-slim` (was `python:3.11-slim`).
+- Fix the `docker-compose.yaml` utility images (were the malformed `openfilter-video-in`/`webvis` + `-connector-gcs` concatenation) and point them at `containers.openfilter.io/plainsightai/openfilter-{video-in,webvis}:1.2.1`.
+- Update dev-tooling floors (`setuptools>=83.0.0`) and switch dev pins to range pins.
+
+## v2.0.5 - 2026-04-23
+
+### Changed
+- Update the openfilter dependency to `>=0.1.30`, and align the CI workflow with the shared release gate (source-paths).
+- Fix release workflow secret names: `PYPI_API_TOKEN` → `PLAINSIGHT_PYPI_TOKEN`, `DOCKERHUB_TOKEN` → `DOCKERHUB_ACCESS_TOKEN` (org-level secret names). Without this the PyPI / Docker Hub tokens resolved to empty and no package has been published since the migration.
 
 ## v2.0.4 - 2026-04-20
 
@@ -32,7 +30,7 @@ GCS Upload release notes
 
 ### Changed
 - Add CI/CD workflows: create-release.yaml (Docker Hub publishing), ci.yaml (PR testing), security-scan.yaml
-- Bump openfilter dependency to >=0.1.27
+- Update openfilter dependency to >=0.1.27
 
 
 ## v2.0.2 - 2025-09-27
