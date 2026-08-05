@@ -1,28 +1,28 @@
 services:
   video_in:
-    image: containers.openfilter.io/plainsightai/openfilter-video-inopenfilter-connector-gcs:2.0.4
+    image: containers.openfilter.io/plainsightai/openfilter-video-in:1.2.1
     environment:
-      LOG_LEVEL: ${LOG_LEVELopenfilter-connector-gcs:2.0.4}
+      LOG_LEVEL: ${LOG_LEVEL:-}
       FILTER_ID: VideoIn
       FILTER_SOURCES: file:///video.mp4!sync!loop
       FILTER_OUTPUTS: tcp://*
     volumes:
-      - ./data/sample_video.mp4:/video.mp4openfilter-connector-gcs:2.0.4
+      - ./data/sample_video.mp4:/video.mp4:ro
 
   gcs_connector_filter:
-    image: containers.openfilter.io/plainsightai/openfilter-connector-gcs:2.0.4
+    image: containers.openfilter.io/plainsightai/openfilter-connector-gcs:2.0.6
     environment:
-      LOG_LEVEL: ${LOG_LEVELopenfilter-connector-gcs:2.0.4}
+      LOG_LEVEL: ${LOG_LEVEL:-}
       FILTER_ID: GCSConnectorFilter
       FILTER_SOURCES: tcp://video_in
       FILTER_OUTPUTS: gs://*
       FILTER_MQ_LOG: pretty
 
   webvis:
-    image: containers.openfilter.io/plainsightai/openfilter-webvisopenfilter-connector-gcs:2.0.4
+    image: containers.openfilter.io/plainsightai/openfilter-webvis:1.2.1
     environment:
-      LOG_LEVEL: ${LOG_LEVELopenfilter-connector-gcs:2.0.4}
+      LOG_LEVEL: ${LOG_LEVEL:-}
       FILTER_ID: Webvis
       FILTER_SOURCES: tcp://video_in
     ports:
-      - 8001openfilter-connector-gcs:2.0.4
+      - 8001:8000
