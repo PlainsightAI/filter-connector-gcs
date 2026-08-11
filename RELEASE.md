@@ -3,9 +3,12 @@ GCS Upload release notes
 
 ## [Unreleased]
 
+## v2.0.7 - 2026-08-10
+
 ### Changed
 
-- Bump the openfilter dependency to 1.2.2
+- Build the image on `openfilter-base` (weekly apt-upgraded python-slim) instead of a stale `python:X.Y.Z-slim` pin, clearing the OS-package CVEs the pin carried.
+- Update the openfilter dependency to 1.2.2
 
 ## v2.0.6 - 2026-08-04
 
@@ -29,13 +32,11 @@ GCS Upload release notes
 - Remove redundant ci.yaml (shared workflow handles PR testing)
 - Add push + pull_request triggers to create-release.yaml
 
-
 ## v2.0.3 - 2026-04-15
 
 ### Changed
 - Add CI/CD workflows: create-release.yaml (Docker Hub publishing), ci.yaml (PR testing), security-scan.yaml
 - Update openfilter dependency to >=0.1.27
-
 
 ## v2.0.2 - 2025-09-27
 ### Updated
@@ -64,7 +65,6 @@ GCS Upload release notes
   - Better error messages for configuration validation
   - Runtime key management to prevent false validation errors
 
-
 ## v1.5.3 - 2025-07-15
 ### Updated
 - Migrated from filter_runtime to openfilter
@@ -87,7 +87,6 @@ GCS Upload release notes
 - Enhanced GCS video connector with file size stability verification to prevent uploading incomplete files
 - Fixed issue with corrupted video file uploads by implementing file completion detection
 - Improved upload reliability by ensuring files have reached a stable size before transfer
-
 
 ## v1.5.0 - 2025-04-09
 
