@@ -10,7 +10,7 @@ services:
       - ./data/sample_video.mp4:/video.mp4:ro
 
   gcs_connector_filter:
-    image: containers.openfilter.io/plainsightai/openfilter-connector-gcs:2.0.7
+    image: containers.openfilter.io/plainsightai/openfilter-connector-gcs:2.0.8
     environment:
       LOG_LEVEL: ${LOG_LEVEL:-}
       FILTER_ID: GCSConnectorFilter
