@@ -3,6 +3,12 @@ GCS Upload release notes
 
 ## [Unreleased]
 
+## v2.0.9 - 2026-08-20
+
+### Changed
+
+- Build the filter image on `openfilter-base:py3.14` (was `py3.11`). The published wheel supports Python 3.14, so the image now ships 3.14. Running on 3.10–3.13 is unaffected.
+
 ## v2.0.8 - 2026-08-18
 
 ### Changed
