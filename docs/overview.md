@@ -2,6 +2,7 @@
 title: GCS Upload
 sidebar_label: Overview
 sidebar_position: 1
+slug: /filters/gcs-upload/overview
 ---
 
 import Admonition from '@theme/Admonition';
