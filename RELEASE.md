@@ -3,6 +3,10 @@ GCS Upload release notes
 
 ## [Unreleased]
 
+### Changed
+
+- Bump the openfilter dependency to 1.4.0
+
 ## v2.0.9 - 2026-08-20
 
 ### Changed
